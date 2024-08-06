@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OPSUCHT Marktinformationen</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPSucht Marktinformationen</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>OPSUCHT Markt</h1>
-    <nav>
-      <ul>
-        <li><a href="#prices">Preise</a></li>
-        <li><a href="#items">Items</a></li>
-        <li><a href="#categories">Kategorien</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <section id="prices">
-      <h2>Marktpreise</h2>
-      <div id="price-list"></div>
-    </section>
-    <section id="items">
-      <h2>Verfügbare Items</h2>
-      <div id="item-list"></div>
-    </section>
-    <section id="categories">
-      <h2>Item-Kategorien</h2>
-      <div id="category-list"></div>
-    </section>
-  </main>
-  <footer>
-    <p>&copy; 2024 OPSUCHT Markt API</p>
-  </footer>
-  <script src="script.js"></script>
+    <header>
+        <h1>OPSucht Marktinformationen</h1>
+    </header>
+    <main>
+        <section class="search-section">
+            <input type="text" id="search-input" placeholder="Suche nach Items...">
+            <button id="search-button">Suchen</button>
+        </section>
+        <section id="items-section">
+            <h2>Alle Items</h2>
+            <ul id="items-list"></ul>
+        </section>
+        <section id="item-details">
+            <h2>Item-Details</h2>
+            <p id="item-name"></p>
+            <p id="item-price"></p>
+        </section>
+    </main>
+    <script src="scripts.js"></script>
 </body>
 </html>

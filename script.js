@@ -1,79 +1,49 @@
-const username = 'ftp_connection';
-const password = '07ec582c-04a1-415a-87a9-38305f6f1381';
-const apiUrl = 'https://api.opsucht.net/';
-const headers = new Headers({
-  'Authorization': 'Basic ' + btoa(username + ':' + password),
-  'User-Agent': 'MyMarketApp/1.0'
-});
+document.addEventListener("DOMContentLoaded", () => {
+    const username = "ftp_connection";
+    const password = "07ec582c-04a1-415a-87a9-38305f6f1381";
+    const baseUrl = "https://api.opsucht.net/market";
 
-async function fetchPrices() {
-  try {
-    const response = await fetch(`${apiUrl}market/prices`, { headers });
-    const data = await response.json();
-    displayPrices(data);
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Preise:', error);
-  }
-}
+    async function fetchApi(endpoint) {
+        const response = await fetch(`${baseUrl}${endpoint}`, {
+            headers: {
+                "Authorization": "Basic " + btoa(`${username}:${password}`),
+                "User-Agent": "YourAppName/1.0"
+            }
+        });
+        return response.json();
+    }
 
-function displayPrices(prices) {
-  const priceList = document.getElementById('price-list');
-  priceList.innerHTML = '';
+    async function loadItems() {
+        const items = await fetchApi("/items");
+        const itemsList = document.getElementById("items-list");
+        itemsList.innerHTML = "";
+        items.forEach(item => {
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            listItem.addEventListener("click", () => loadItemDetails(item));
+            itemsList.appendChild(listItem);
+        });
+    }
 
-  for (const item in prices) {
-    const priceElement = document.createElement('div');
-    priceElement.className = 'price-item';
-    priceElement.innerHTML = `<strong>${item}</strong>: ${prices[item]}`;
-    priceList.appendChild(priceElement);
-  }
-}
+    async function loadItemDetails(item) {
+        const itemDetails = await fetchApi(`/price/${item}`);
+        document.getElementById("item-name").textContent = `Name: ${item}`;
+        document.getElementById("item-price").textContent = `Preis: ${itemDetails.price}`;
+    }
 
-async function fetchItems() {
-  try {
-    const response = await fetch(`${apiUrl}market/items`, { headers });
-    const items = await response.json();
-    displayItems(items);
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Items:', error);
-  }
-}
+    document.getElementById("search-button").addEventListener("click", async () => {
+        const query = document.getElementById("search-input").value.toLowerCase();
+        const items = await fetchApi("/items");
+        const filteredItems = items.filter(item => item.toLowerCase().includes(query));
+        const itemsList = document.getElementById("items-list");
+        itemsList.innerHTML = "";
+        filteredItems.forEach(item => {
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            listItem.addEventListener("click", () => loadItemDetails(item));
+            itemsList.appendChild(listItem);
+        });
+    });
 
-function displayItems(items) {
-  const itemList = document.getElementById('item-list');
-  itemList.innerHTML = '';
-
-  items.forEach(item => {
-    const itemElement = document.createElement('div');
-    itemElement.className = 'item';
-    itemElement.innerText = item;
-    itemList.appendChild(itemElement);
-  });
-}
-
-async function fetchCategories() {
-  try {
-    const response = await fetch(`${apiUrl}market/categories`, { headers });
-    const categories = await response.json();
-    displayCategories(categories);
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Kategorien:', error);
-  }
-}
-
-function displayCategories(categories) {
-  const categoryList = document.getElementById('category-list');
-  categoryList.innerHTML = '';
-
-  categories.forEach(category => {
-    const categoryElement = document.createElement('div');
-    categoryElement.className = 'category';
-    categoryElement.innerText = category;
-    categoryList.appendChild(categoryElement);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  fetchPrices();
-  fetchItems();
-  fetchCategories();
+    loadItems();
 });

@@ -1,49 +1,49 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const username = "ftp_connection";
-    const password = "07ec582c-04a1-415a-87a9-38305f6f1381";
-    const baseUrl = "https://api.opsucht.net/market";
+// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const itemsList = document.getElementById('items-list');
+    const getPriceBtn = document.getElementById('get-price-btn');
+    const itemInput = document.getElementById('item-input');
+    const itemPrice = document.getElementById('item-price');
 
-    async function fetchApi(endpoint) {
-        const response = await fetch(`${baseUrl}${endpoint}`, {
-            headers: {
-                "Authorization": "Basic " + btoa(`${username}:${password}`),
-                "User-Agent": "YourAppName/1.0"
-            }
+    const username = 'ftp_connection';
+    const password = '07ec582c-04a1-415a-87a9-38305f6f1381';
+    const auth = 'Basic ' + btoa(`${username}:${password}`);
+    const userAgent = 'APITEST/1.0';
+
+    // API: Liste der Items abrufen
+    fetch('https://api.opsucht.net/market/items', {
+        headers: {
+            'Authorization': auth,
+            'User-Agent': userAgent
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            itemsList.appendChild(li);
         });
-        return response.json();
-    }
+    })
+    .catch(error => console.error('Fehler beim Abrufen der Items:', error));
 
-    async function loadItems() {
-        const items = await fetchApi("/items");
-        const itemsList = document.getElementById("items-list");
-        itemsList.innerHTML = "";
-        items.forEach(item => {
-            const listItem = document.createElement("li");
-            listItem.textContent = item;
-            listItem.addEventListener("click", () => loadItemDetails(item));
-            itemsList.appendChild(listItem);
-        });
-    }
-
-    async function loadItemDetails(item) {
-        const itemDetails = await fetchApi(`/price/${item}`);
-        document.getElementById("item-name").textContent = `Name: ${item}`;
-        document.getElementById("item-price").textContent = `Preis: ${itemDetails.price}`;
-    }
-
-    document.getElementById("search-button").addEventListener("click", async () => {
-        const query = document.getElementById("search-input").value.toLowerCase();
-        const items = await fetchApi("/items");
-        const filteredItems = items.filter(item => item.toLowerCase().includes(query));
-        const itemsList = document.getElementById("items-list");
-        itemsList.innerHTML = "";
-        filteredItems.forEach(item => {
-            const listItem = document.createElement("li");
-            listItem.textContent = item;
-            listItem.addEventListener("click", () => loadItemDetails(item));
-            itemsList.appendChild(listItem);
-        });
+    // API: Preis eines Items abrufen
+    getPriceBtn.addEventListener('click', () => {
+        const itemName = itemInput.value.trim().toLowerCase();
+        if (itemName) {
+            fetch(`https://api.opsucht.netmarket/price/{item}market/price/{item}${itemName}`, {
+                headers: {
+                    'Authorization': auth,
+                    'User-Agent': userAgent
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                itemPrice.textContent = `Preis für ${itemName}: ${data.price} Coins`;
+            })
+            .catch(error => console.error('Fehler beim Abrufen des Preises:', error));
+        } else {
+            itemPrice.textContent = 'Bitte gib einen gültigen Itemnamen ein.';
+        }
     });
-
-    loadItems();
 });

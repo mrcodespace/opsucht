@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPSucht Marktinformationen</title>
+    <title>OPSUCHT Markt</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>OPSucht Marktinformationen</h1>
+        <h1>OPSUCHT Marktübersicht</h1>
     </header>
     <main>
-        <section class="search-section">
-            <input type="text" id="search-input" placeholder="Suche nach Items...">
-            <button id="search-button">Suchen</button>
-        </section>
         <section id="items-section">
-            <h2>Alle Items</h2>
-            <ul id="items-list"></ul>
+            <h2>Marktitems</h2>
+            <ul id="items-list">
+                <!-- Items werden hier dynamisch hinzugefügt -->
+            </ul>
         </section>
-        <section id="item-details">
-            <h2>Item-Details</h2>
-            <p id="item-name"></p>
+        <section id="price-section">
+            <h2>Preis eines Items abfragen</h2>
+            <input type="text" id="item-input" placeholder="Item eingeben...">
+            <button id="get-price-btn">Preis abrufen</button>
             <p id="item-price"></p>
         </section>
     </main>
-    <script src="scripts.js"></script>
+    <footer>
+        <p>&copy; 2024 OPSUCHT Markt API</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
